@@ -49,6 +49,7 @@ TEST(boolean) {
   REQUIRE_NOT_EQUAL(idx, nullptr);
   MESSAGE("append");
   REQUIRE(idx->append(make_data_view(true)));
+    // foo
   REQUIRE(idx->append(make_data_view(true)));
   REQUIRE(idx->append(make_data_view(false)));
   REQUIRE(idx->append(make_data_view(true)));
