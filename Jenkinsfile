@@ -15,42 +15,10 @@ debugBuildFlags =  defaultBuildFlags + [
 
 // Our build matrix. Keys are the operating system labels and values are build configurations.
 buildMatrix = [
-    // Debug builds with ASAN + trace logs.
-    [ 'Linux', [
-        builds: ['debug'],
-        tools: ['gcc8'],
-        cmakeArgs: debugBuildFlags,
-    ]],
-    [ 'macOS', [
-        builds: ['debug'],
-        tools: ['clang'],
-        cmakeArgs: debugBuildFlags,
-    ]],
     ['FreeBSD', [
         builds: ['debug'],
         tools: ['clang'],
         cmakeArgs: debugBuildFlags,
-    ]],
-    // Release builds for various OS/tool combinations.
-    [ 'Linux', [
-        builds: ['release'],
-        tools: ['gcc8'],
-        cmakeArgs: releaseBuildFlags,
-    ]],
-    [ 'macOS', [
-        builds: ['release'],
-        tools: ['clang'],
-        cmakeArgs: releaseBuildFlags,
-    ]],
-    // One Additional build for coverage reports.
-    ['Linux', [
-        builds: ['debug'],
-        tools: ['gcc8 && gcovr'],
-        extraSteps: ['coverageReport'],
-        cmakeArgs: defaultBuildFlags + [
-            'ENABLE_GCOV:BOOL=yes',
-            'NO_EXCEPTIONS:BOOL=yes',
-        ],
     ]],
 ]
 
@@ -109,6 +77,11 @@ def cmakeSteps(buildType, cmakeArgs, buildId) {
             workingDir: 'build',
         ])
     }
+    zip([
+        archive: true,
+        dir: 'vast-sources',
+        zipFile: "vast-sources.zip",
+    ])
     // Only generate artifacts for the master branch.
     if (PrettyJobBaseName == 'master') {
         zip([
